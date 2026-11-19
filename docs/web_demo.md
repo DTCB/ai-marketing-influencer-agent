@@ -2,6 +2,8 @@
 
 生产仓库为 `DTCB/ai-marketing-influencer-agent`。Vercel Hobby 项目建议命名为 `influencer-campaign-demo`，使用平台提供的 `.vercel.app` 生产域名。
 
+生产入口 [influencer-campaign-demo.vercel.app](https://influencer-campaign-demo.vercel.app/)。
+
 ## 首次发布与后续更新
 
 1. 在本地运行 `python -m scripts.build_demo_snapshot --check`、`npm ci` 和 `npm run build`。业务数据变化后，运行 `python -m scripts.build_demo_snapshot` 更新前端随包提供的案例。
@@ -45,4 +47,4 @@ Upstash 可使用独立实例或沿用已有实例，达人 Demo 写入专用命
 | 实时 AI | 同一公网 IP 用合成资料依次验证 Brief 解析、推荐解释和复盘摘要。第四次请求返回 `429`，模板和规则计算可继续使用 |
 | 自动更新 | Preview 和正式部署分别对应 GitHub 的预览和主分支提交，发布后生产 URL 一致 |
 
-生产域名、访问网络、部署提交及真实模型结果在完成相应线上验证后填写。
+2026-11-19，生产域名首次指向案例版提交 `c345f3f`。匿名 HTTPS 验证首页、预算组合和复盘 API 通过，`/api/status` 显示 `hkg1`、案例模式。国内手机流量和实时模型待验收。
