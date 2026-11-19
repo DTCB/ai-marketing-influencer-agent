@@ -1,0 +1,9 @@
+.git/
+.env*
+.vercel/
+.streamlit/secrets.toml
+.venv/
+node_modules/
+dist/
+output/
+**/__pycache__/

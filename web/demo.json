@@ -1,0 +1,632 @@
+{
+  "case": {
+    "case_id": "CASE001",
+    "brand_name": "清颜实验室",
+    "product_name": "敏感肌修护精华",
+    "product_category": "护肤",
+    "product_keywords": "敏感肌|修护|屏障|温和",
+    "target_audience": "18-30岁女性|敏感肌|一二线城市",
+    "campaign_goal": "种草转化",
+    "budget_total": 50000,
+    "expected_creator_count": 5,
+    "preferred_platform": "小红书",
+    "content_format": "图文|短视频",
+    "price_range": "中端",
+    "key_selling_points": "修护屏障|无酒精|低刺激|换季可用",
+    "launch_stage": "新品期",
+    "avoid_categories": "医美夸张宣传|强功效承诺"
+  },
+  "conditions": {
+    "budget_total": 50000,
+    "expected_creator_count": 5,
+    "excluded_creator_ids": [],
+    "save_rate_target": 0.016,
+    "cpa_target": 40.0
+  },
+  "creators": [
+    {
+      "creator_id": "C001",
+      "creator_name": "小鹿成分笔记",
+      "content_style": "成分测评",
+      "base_quote": 12000,
+      "avg_views": 92000,
+      "risk_note": "注意功效表述不要医疗化",
+      "sample_post_title": "敏感肌修护精华真实测评"
+    },
+    {
+      "creator_id": "C002",
+      "creator_name": "阿梨护肤日记",
+      "content_style": "图文种草",
+      "base_quote": 6800,
+      "avg_views": 56000,
+      "risk_note": "报价友好但曝光上限中等",
+      "sample_post_title": "换季敏感肌护肤流程"
+    },
+    {
+      "creator_id": "C004",
+      "creator_name": "晚安小敏",
+      "content_style": "生活方式种草",
+      "base_quote": 9800,
+      "avg_views": 76000,
+      "risk_note": "内容调性温和适合新品教育",
+      "sample_post_title": "敏感肌晚间修护流程"
+    },
+    {
+      "creator_id": "C007",
+      "creator_name": "丸子省钱护肤",
+      "content_style": "清单种草",
+      "base_quote": 5200,
+      "avg_views": 48000,
+      "risk_note": "适合预算有限的铺量",
+      "sample_post_title": "百元内敏感肌修护好物"
+    },
+    {
+      "creator_id": "C009",
+      "creator_name": "山茶花测评局",
+      "content_style": "深度测评",
+      "base_quote": 15000,
+      "avg_views": 118000,
+      "risk_note": "强匹配适合作为核心达人",
+      "sample_post_title": "修护精华七天使用记录"
+    },
+    {
+      "creator_id": "C010",
+      "creator_name": "柚子妈妈好物",
+      "content_style": "家庭场景种草",
+      "base_quote": 9200,
+      "avg_views": 60000,
+      "risk_note": "可覆盖妈妈人群",
+      "sample_post_title": "妈妈敏感肌换季护肤"
+    },
+    {
+      "creator_id": "C012",
+      "creator_name": "甜梨生活研究所",
+      "content_style": "生活方式图文",
+      "base_quote": 10500,
+      "avg_views": 73000,
+      "risk_note": "适合软性种草",
+      "sample_post_title": "换季桌面好物与护肤"
+    },
+    {
+      "creator_id": "C013",
+      "creator_name": "蓝莓护肤避雷",
+      "content_style": "避雷测评",
+      "base_quote": 10000,
+      "avg_views": 82000,
+      "risk_note": "风格尖锐需控制话术",
+      "sample_post_title": "敏感肌护肤避雷清单"
+    },
+    {
+      "creator_id": "C016",
+      "creator_name": "薯条美妆快报",
+      "content_style": "新品清单",
+      "base_quote": 13000,
+      "avg_views": 102000,
+      "risk_note": "适合新品声量",
+      "sample_post_title": "本月值得看的护肤新品"
+    },
+    {
+      "creator_id": "C018",
+      "creator_name": "棉花糖护肤社",
+      "content_style": "图文测评",
+      "base_quote": 7200,
+      "avg_views": 65000,
+      "risk_note": "高性价比适合铺量",
+      "sample_post_title": "敏感肌平价修护精华对比"
+    },
+    {
+      "creator_id": "C020",
+      "creator_name": "清透护肤指南",
+      "content_style": "深度图文",
+      "base_quote": 13800,
+      "avg_views": 98000,
+      "risk_note": "强匹配适合作为主推达人",
+      "sample_post_title": "屏障受损后的修护路线"
+    }
+  ],
+  "plan": {
+    "conditions": {
+      "budget_total": 50000,
+      "expected_creator_count": 5,
+      "excluded_creator_ids": [],
+      "save_rate_target": 0.016,
+      "cpa_target": 40.0
+    },
+    "baseline": [
+      {
+        "creator_id": "C001",
+        "creator_name": "小鹿成分笔记",
+        "content_style": "成分测评",
+        "base_quote": 12000,
+        "avg_views": 92000,
+        "risk_note": "注意功效表述不要医疗化",
+        "sample_post_title": "敏感肌修护精华真实测评",
+        "total_score": 72.83,
+        "matched_category_tags": "修护|护肤|敏感肌",
+        "matched_audience_tags": "18-30岁女性|一二线城市|敏感肌",
+        "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 18-30岁女性、一二线城市、敏感肌"
+      },
+      {
+        "creator_id": "C013",
+        "creator_name": "蓝莓护肤避雷",
+        "content_style": "避雷测评",
+        "base_quote": 10000,
+        "avg_views": 82000,
+        "risk_note": "风格尖锐需控制话术",
+        "sample_post_title": "敏感肌护肤避雷清单",
+        "total_score": 63.63,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "18-30岁女性|敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 18-30岁女性、敏感肌"
+      },
+      {
+        "creator_id": "C020",
+        "creator_name": "清透护肤指南",
+        "content_style": "深度图文",
+        "base_quote": 13800,
+        "avg_views": 98000,
+        "risk_note": "强匹配适合作为主推达人",
+        "sample_post_title": "屏障受损后的修护路线",
+        "total_score": 60.23,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "一二线城市|敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 一二线城市、敏感肌"
+      },
+      {
+        "creator_id": "C018",
+        "creator_name": "棉花糖护肤社",
+        "content_style": "图文测评",
+        "base_quote": 7200,
+        "avg_views": 65000,
+        "risk_note": "高性价比适合铺量",
+        "sample_post_title": "敏感肌平价修护精华对比",
+        "total_score": 59.73,
+        "matched_category_tags": "修护|护肤|敏感肌",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 敏感肌"
+      },
+      {
+        "creator_id": "C004",
+        "creator_name": "晚安小敏",
+        "content_style": "生活方式种草",
+        "base_quote": 9800,
+        "avg_views": 76000,
+        "risk_note": "内容调性温和适合新品教育",
+        "sample_post_title": "敏感肌晚间修护流程",
+        "total_score": 53.8,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 敏感肌"
+      }
+    ],
+    "selected": [
+      {
+        "creator_id": "C001",
+        "creator_name": "小鹿成分笔记",
+        "content_style": "成分测评",
+        "base_quote": 12000,
+        "avg_views": 92000,
+        "risk_note": "注意功效表述不要医疗化",
+        "sample_post_title": "敏感肌修护精华真实测评",
+        "total_score": 72.83,
+        "matched_category_tags": "修护|护肤|敏感肌",
+        "matched_audience_tags": "18-30岁女性|一二线城市|敏感肌",
+        "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 18-30岁女性、一二线城市、敏感肌"
+      },
+      {
+        "creator_id": "C013",
+        "creator_name": "蓝莓护肤避雷",
+        "content_style": "避雷测评",
+        "base_quote": 10000,
+        "avg_views": 82000,
+        "risk_note": "风格尖锐需控制话术",
+        "sample_post_title": "敏感肌护肤避雷清单",
+        "total_score": 63.63,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "18-30岁女性|敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 18-30岁女性、敏感肌"
+      },
+      {
+        "creator_id": "C020",
+        "creator_name": "清透护肤指南",
+        "content_style": "深度图文",
+        "base_quote": 13800,
+        "avg_views": 98000,
+        "risk_note": "强匹配适合作为主推达人",
+        "sample_post_title": "屏障受损后的修护路线",
+        "total_score": 60.23,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "一二线城市|敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 一二线城市、敏感肌"
+      },
+      {
+        "creator_id": "C018",
+        "creator_name": "棉花糖护肤社",
+        "content_style": "图文测评",
+        "base_quote": 7200,
+        "avg_views": 65000,
+        "risk_note": "高性价比适合铺量",
+        "sample_post_title": "敏感肌平价修护精华对比",
+        "total_score": 59.73,
+        "matched_category_tags": "修护|护肤|敏感肌",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 敏感肌"
+      },
+      {
+        "creator_id": "C002",
+        "creator_name": "阿梨护肤日记",
+        "content_style": "图文种草",
+        "base_quote": 6800,
+        "avg_views": 56000,
+        "risk_note": "报价友好但曝光上限中等",
+        "sample_post_title": "换季敏感肌护肤流程",
+        "total_score": 51.02,
+        "matched_category_tags": "护肤",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 护肤。受众标签匹配 敏感肌"
+      }
+    ],
+    "candidate_count": 11,
+    "minimum_quote": 38200.0,
+    "baseline_quote": 52800.0,
+    "selected_quote": 49800.0,
+    "budget_gap": null,
+    "removed": [
+      {
+        "creator_id": "C004",
+        "creator_name": "晚安小敏",
+        "content_style": "生活方式种草",
+        "base_quote": 9800,
+        "avg_views": 76000,
+        "risk_note": "内容调性温和适合新品教育",
+        "sample_post_title": "敏感肌晚间修护流程",
+        "total_score": 53.8,
+        "matched_category_tags": "护肤|敏感肌",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 敏感肌"
+      }
+    ],
+    "added": [
+      {
+        "creator_id": "C002",
+        "creator_name": "阿梨护肤日记",
+        "content_style": "图文种草",
+        "base_quote": 6800,
+        "avg_views": 56000,
+        "risk_note": "报价友好但曝光上限中等",
+        "sample_post_title": "换季敏感肌护肤流程",
+        "total_score": 51.02,
+        "matched_category_tags": "护肤",
+        "matched_audience_tags": "敏感肌",
+        "evidence": "品类匹配 护肤。受众标签匹配 敏感肌"
+      }
+    ],
+    "comparison_quote": 52800.0,
+    "comparison_score": 310.22,
+    "selected_score": 307.44
+  },
+  "campaign": {
+    "plan": {
+      "conditions": {
+        "budget_total": 50000,
+        "expected_creator_count": 5,
+        "excluded_creator_ids": [],
+        "save_rate_target": 0.016,
+        "cpa_target": 40.0
+      },
+      "baseline": [
+        {
+          "creator_id": "C001",
+          "creator_name": "小鹿成分笔记",
+          "content_style": "成分测评",
+          "base_quote": 12000,
+          "avg_views": 92000,
+          "risk_note": "注意功效表述不要医疗化",
+          "sample_post_title": "敏感肌修护精华真实测评",
+          "total_score": 72.83,
+          "matched_category_tags": "修护|护肤|敏感肌",
+          "matched_audience_tags": "18-30岁女性|一二线城市|敏感肌",
+          "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 18-30岁女性、一二线城市、敏感肌"
+        },
+        {
+          "creator_id": "C013",
+          "creator_name": "蓝莓护肤避雷",
+          "content_style": "避雷测评",
+          "base_quote": 10000,
+          "avg_views": 82000,
+          "risk_note": "风格尖锐需控制话术",
+          "sample_post_title": "敏感肌护肤避雷清单",
+          "total_score": 63.63,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "18-30岁女性|敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 18-30岁女性、敏感肌"
+        },
+        {
+          "creator_id": "C020",
+          "creator_name": "清透护肤指南",
+          "content_style": "深度图文",
+          "base_quote": 13800,
+          "avg_views": 98000,
+          "risk_note": "强匹配适合作为主推达人",
+          "sample_post_title": "屏障受损后的修护路线",
+          "total_score": 60.23,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "一二线城市|敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 一二线城市、敏感肌"
+        },
+        {
+          "creator_id": "C018",
+          "creator_name": "棉花糖护肤社",
+          "content_style": "图文测评",
+          "base_quote": 7200,
+          "avg_views": 65000,
+          "risk_note": "高性价比适合铺量",
+          "sample_post_title": "敏感肌平价修护精华对比",
+          "total_score": 59.73,
+          "matched_category_tags": "修护|护肤|敏感肌",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 敏感肌"
+        },
+        {
+          "creator_id": "C004",
+          "creator_name": "晚安小敏",
+          "content_style": "生活方式种草",
+          "base_quote": 9800,
+          "avg_views": 76000,
+          "risk_note": "内容调性温和适合新品教育",
+          "sample_post_title": "敏感肌晚间修护流程",
+          "total_score": 53.8,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 敏感肌"
+        }
+      ],
+      "selected": [
+        {
+          "creator_id": "C001",
+          "creator_name": "小鹿成分笔记",
+          "content_style": "成分测评",
+          "base_quote": 12000,
+          "avg_views": 92000,
+          "risk_note": "注意功效表述不要医疗化",
+          "sample_post_title": "敏感肌修护精华真实测评",
+          "total_score": 72.83,
+          "matched_category_tags": "修护|护肤|敏感肌",
+          "matched_audience_tags": "18-30岁女性|一二线城市|敏感肌",
+          "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 18-30岁女性、一二线城市、敏感肌"
+        },
+        {
+          "creator_id": "C013",
+          "creator_name": "蓝莓护肤避雷",
+          "content_style": "避雷测评",
+          "base_quote": 10000,
+          "avg_views": 82000,
+          "risk_note": "风格尖锐需控制话术",
+          "sample_post_title": "敏感肌护肤避雷清单",
+          "total_score": 63.63,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "18-30岁女性|敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 18-30岁女性、敏感肌"
+        },
+        {
+          "creator_id": "C020",
+          "creator_name": "清透护肤指南",
+          "content_style": "深度图文",
+          "base_quote": 13800,
+          "avg_views": 98000,
+          "risk_note": "强匹配适合作为主推达人",
+          "sample_post_title": "屏障受损后的修护路线",
+          "total_score": 60.23,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "一二线城市|敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 一二线城市、敏感肌"
+        },
+        {
+          "creator_id": "C018",
+          "creator_name": "棉花糖护肤社",
+          "content_style": "图文测评",
+          "base_quote": 7200,
+          "avg_views": 65000,
+          "risk_note": "高性价比适合铺量",
+          "sample_post_title": "敏感肌平价修护精华对比",
+          "total_score": 59.73,
+          "matched_category_tags": "修护|护肤|敏感肌",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 修护、护肤、敏感肌。受众标签匹配 敏感肌"
+        },
+        {
+          "creator_id": "C002",
+          "creator_name": "阿梨护肤日记",
+          "content_style": "图文种草",
+          "base_quote": 6800,
+          "avg_views": 56000,
+          "risk_note": "报价友好但曝光上限中等",
+          "sample_post_title": "换季敏感肌护肤流程",
+          "total_score": 51.02,
+          "matched_category_tags": "护肤",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 护肤。受众标签匹配 敏感肌"
+        }
+      ],
+      "candidate_count": 11,
+      "minimum_quote": 38200.0,
+      "baseline_quote": 52800.0,
+      "selected_quote": 49800.0,
+      "budget_gap": null,
+      "removed": [
+        {
+          "creator_id": "C004",
+          "creator_name": "晚安小敏",
+          "content_style": "生活方式种草",
+          "base_quote": 9800,
+          "avg_views": 76000,
+          "risk_note": "内容调性温和适合新品教育",
+          "sample_post_title": "敏感肌晚间修护流程",
+          "total_score": 53.8,
+          "matched_category_tags": "护肤|敏感肌",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 护肤、敏感肌。受众标签匹配 敏感肌"
+        }
+      ],
+      "added": [
+        {
+          "creator_id": "C002",
+          "creator_name": "阿梨护肤日记",
+          "content_style": "图文种草",
+          "base_quote": 6800,
+          "avg_views": 56000,
+          "risk_note": "报价友好但曝光上限中等",
+          "sample_post_title": "换季敏感肌护肤流程",
+          "total_score": 51.02,
+          "matched_category_tags": "护肤",
+          "matched_audience_tags": "敏感肌",
+          "evidence": "品类匹配 护肤。受众标签匹配 敏感肌"
+        }
+      ],
+      "comparison_quote": 52800.0,
+      "comparison_score": 310.22,
+      "selected_score": 307.44
+    },
+    "briefs": {
+      "C001": {
+        "title": "敏感肌修护精华成分测评｜质地、使用顺序和肤感",
+        "delivery": "交付 1 篇测评图文，包含成分信息图、取样和涂抹的近景照片，说明在晚间护肤流程中的使用顺序，记录实际肤感。",
+        "review_notes": "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。审稿时避开医美夸张宣传、强功效承诺。核对成分表与品牌资料，删除由单一成分推导的产品效果承诺。"
+      },
+      "C013": {
+        "title": "敏感肌修护精华使用记录｜避雷测评",
+        "delivery": "沿用「避雷测评」风格交付 1 篇笔记。开头说明使用场景，正文用实拍展示产品质地和用法，结尾整理可收藏的使用要点。",
+        "review_notes": "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。审稿时避开医美夸张宣传、强功效承诺。"
+      },
+      "C020": {
+        "title": "敏感肌修护精华使用记录｜深度图文",
+        "delivery": "沿用「深度图文」风格交付 1 篇笔记。开头说明使用场景，正文用实拍展示产品质地和用法，结尾整理可收藏的使用要点。",
+        "review_notes": "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。审稿时避开医美夸张宣传、强功效承诺。"
+      },
+      "C018": {
+        "title": "敏感肌修护精华使用记录｜图文测评",
+        "delivery": "沿用「图文测评」风格交付 1 篇笔记。开头说明使用场景，正文用实拍展示产品质地和用法，结尾整理可收藏的使用要点。",
+        "review_notes": "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。审稿时避开医美夸张宣传、强功效承诺。"
+      },
+      "C002": {
+        "title": "换季晚间护肤日记｜敏感肌修护精华怎么搭配日常步骤",
+        "delivery": "交付 1 篇步骤图文，封面写明换季场景，正文按清洁、精华、保湿组织图片，在精华步骤展示用量与使用场景。",
+        "review_notes": "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。审稿时避开医美夸张宣传、强功效承诺。核对使用顺序和用量，删去适用于所有肤质的表述。"
+      }
+    },
+    "review": {
+      "rows": [
+        {
+          "creator_id": "C001",
+          "creator_name": "小鹿成分笔记",
+          "received": true,
+          "base_quote": 12000,
+          "spend": 12000.0,
+          "impressions": 168000.0,
+          "clicks": 7100.0,
+          "saves": 2200.0,
+          "revenue": 28500.0,
+          "conversions": 310.0,
+          "cpa": 38.71,
+          "roi": 2.38
+        },
+        {
+          "creator_id": "C013",
+          "creator_name": "蓝莓护肤避雷",
+          "received": false,
+          "base_quote": 10000,
+          "spend": null,
+          "impressions": null,
+          "clicks": null,
+          "saves": null,
+          "revenue": null,
+          "conversions": null,
+          "cpa": null,
+          "roi": null
+        },
+        {
+          "creator_id": "C020",
+          "creator_name": "清透护肤指南",
+          "received": true,
+          "base_quote": 13800,
+          "spend": 13800.0,
+          "impressions": 176000.0,
+          "clicks": 8300.0,
+          "saves": 2600.0,
+          "revenue": 38200.0,
+          "conversions": 395.0,
+          "cpa": 34.94,
+          "roi": 2.77
+        },
+        {
+          "creator_id": "C018",
+          "creator_name": "棉花糖护肤社",
+          "received": true,
+          "base_quote": 7200,
+          "spend": 7200.0,
+          "impressions": 108000.0,
+          "clicks": 5100.0,
+          "saves": 1900.0,
+          "revenue": 20500.0,
+          "conversions": 238.0,
+          "cpa": 30.25,
+          "roi": 2.85
+        },
+        {
+          "creator_id": "C002",
+          "creator_name": "阿梨护肤日记",
+          "received": true,
+          "base_quote": 6800,
+          "spend": 6800.0,
+          "impressions": 95000.0,
+          "clicks": 3600.0,
+          "saves": 1600.0,
+          "revenue": 12800.0,
+          "conversions": 145.0,
+          "cpa": 46.9,
+          "roi": 1.88
+        }
+      ],
+      "received_count": 4,
+      "summary": {
+        "spend": 39800.0,
+        "impressions": 547000.0,
+        "clicks": 24100.0,
+        "conversions": 1088.0,
+        "revenue": 100000.0,
+        "ctr": 0.0441,
+        "cvr": 0.0451,
+        "roi": 2.51
+      },
+      "save_rate": {
+        "actual": 0.015173674588665448,
+        "status": "暂未达标"
+      },
+      "cpa": {
+        "actual": 36.580882352941174,
+        "status": "暂达标"
+      },
+      "next_candidate": {
+        "creator_id": "C018",
+        "creator_name": "棉花糖护肤社",
+        "received": true,
+        "base_quote": 7200,
+        "spend": 7200.0,
+        "impressions": 108000.0,
+        "clicks": 5100.0,
+        "saves": 1900.0,
+        "revenue": 20500.0,
+        "conversions": 238.0,
+        "cpa": 30.25,
+        "roi": 2.85
+      }
+    }
+  },
+  "brief_example": {
+    "sentence": "5 万内找 5 位，内容温和一点",
+    "budget": 50000,
+    "count": 5,
+    "tone": "gentle",
+    "uncertainties": []
+  }
+}

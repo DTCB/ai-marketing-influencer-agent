@@ -1,8 +1,15 @@
 .env
+.env.*
+!.env.example
+.vercel/
+node_modules/
+dist/
+output/
 .venv/
 __pycache__/
 *.pyc
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 .agents/
 .codex/
 AGENTS.md

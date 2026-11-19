@@ -4,6 +4,47 @@ from typing import Any, Dict
 
 import pandas as pd
 
+from .scoring import parse_tags
+
+
+def format_creator_evidence(creator: Dict[str, Any]) -> str:
+    category_tags = parse_tags(creator.get("matched_category_tags"))
+    audience_tags = parse_tags(creator.get("matched_audience_tags"))
+    evidence = []
+    if category_tags:
+        evidence.append(f"品类匹配 {'、'.join(category_tags)}")
+    if audience_tags:
+        evidence.append(f"受众标签匹配 {'、'.join(audience_tags)}")
+    return "。".join(evidence) if evidence else "暂无直接匹配的标签，合作前核对内容与受众。"
+
+
+def generate_cooperation_card(brief: Dict[str, Any], creator: Dict[str, Any]) -> Dict[str, str]:
+    product = brief["product_name"]
+    style = creator["content_style"]
+    review_notes = "卖点以品牌已核实的材料为准，肤感由达人按实际使用体验填写。"
+    avoid = parse_tags(brief.get("avoid_categories"))
+    if avoid:
+        review_notes += f"审稿时避开{'、'.join(avoid)}。"
+
+    if style == "成分测评":
+        return {
+            "title": f"{product}成分测评｜质地、使用顺序和肤感",
+            "delivery": "交付 1 篇测评图文，包含成分信息图、取样和涂抹的近景照片，说明在晚间护肤流程中的使用顺序，记录实际肤感。",
+            "review_notes": f"{review_notes}核对成分表与品牌资料，删除由单一成分推导的产品效果承诺。",
+        }
+    if style == "图文种草":
+        return {
+            "title": f"换季晚间护肤日记｜{product}怎么搭配日常步骤",
+            "delivery": "交付 1 篇步骤图文，封面写明换季场景，正文按清洁、精华、保湿组织图片，在精华步骤展示用量与使用场景。",
+            "review_notes": f"{review_notes}核对使用顺序和用量，删去适用于所有肤质的表述。",
+        }
+
+    return {
+        "title": f"{product}使用记录｜{style}",
+        "delivery": f"沿用「{style}」风格交付 1 篇笔记。开头说明使用场景，正文用实拍展示产品质地和用法，结尾整理可收藏的使用要点。",
+        "review_notes": review_notes,
+    }
+
 
 def generate_recommendation_reason(brief: Dict[str, Any], creator: Dict[str, Any]) -> str:
     return (
