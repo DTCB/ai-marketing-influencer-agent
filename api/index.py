@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
+import time
 from dataclasses import asdict
 from typing import Literal
 
@@ -158,7 +160,13 @@ def ai(body: AIBody, request: Request) -> JSONResponse:
             headers=headers,
         )
 
+    started = time.monotonic()
     result = generate_with_optional_llm(prompt, lambda: fallback.get("content", ""), public_web=True)
+    if not result.used_llm:
+        logging.getLogger(__name__).warning(
+            "AI fallback task=%s elapsed=%.1fs reason=%s",
+            body.task, time.monotonic() - started, result.error,
+        )
     if result.used_llm and body.task == "brief":
         try:
             parsed = parse_brief_response(result.content)
@@ -171,6 +179,6 @@ def ai(body: AIBody, request: Request) -> JSONResponse:
     if result.used_llm:
         return JSONResponse({"mode": "live", "content": result.content}, headers=headers)
     return JSONResponse(
-        {"mode": "demo", "message": "实时模型暂不可用，可继续使用内置示例和模板。", **fallback},
+        {"mode": "demo", "message": f"{result.error or '模型暂时无法生成。'} 可继续使用内置示例和模板。", **fallback},
         headers=headers,
     )

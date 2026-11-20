@@ -144,7 +144,7 @@ def generate_with_optional_llm(
             client_kwargs["timeout"] = min(config.timeout_seconds, 30) if config.timeout_seconds > 0 else 20
             request_kwargs["max_tokens"] = 500
             if config.provider == "通义千问 / 百炼":
-                thinking = os.environ.get("LLM_ENABLE_THINKING", "").lower()
+                thinking = os.environ.get("LLM_ENABLE_THINKING", "").strip().lower()
                 if thinking in {"true", "false"}:
                     request_kwargs["extra_body"] = {"enable_thinking": thinking == "true"}
 
