@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import json
 import logging
 import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Optional
+from urllib.error import HTTPError, URLError
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 try:
     from dotenv import dotenv_values
@@ -101,7 +104,7 @@ def get_llm_config() -> LLMConfig:
 
 
 def describe_llm_failure(exc: Exception) -> str:
-    status = getattr(exc, "status_code", None)
+    status = exc.code if isinstance(exc, HTTPError) else getattr(exc, "status_code", None)
     if status == 401:
         return "服务商拒绝了 API Key（401）。请检查当前使用的 Key。"
     if status == 403:
@@ -110,11 +113,46 @@ def describe_llm_failure(exc: Exception) -> str:
         return "服务商限制了请求（429）。请检查额度或稍后重试。"
     if isinstance(status, int):
         return f"服务商返回 HTTP {status}。请检查接口地址和模型配置，或稍后重试。"
-    if type(exc).__name__ == "APITimeoutError":
+    reason = exc.reason if isinstance(exc, URLError) else exc
+    if isinstance(reason, TimeoutError) or type(exc).__name__ == "APITimeoutError":
         return "连接或等待模型响应超时，请重试。"
-    if type(exc).__name__ == "APIConnectionError":
+    if isinstance(exc, (URLError, ConnectionError)) or type(exc).__name__ == "APIConnectionError":
         return "无法连接到模型服务，请检查网络和接口地址。"
     return "模型调用失败，请检查本地配置。"
+
+
+class _NoLLMRedirect(HTTPRedirectHandler):
+    def redirect_request(self, request, file, code, message, headers, new_url):
+        return None
+
+
+def _generate_public_content(config: LLMConfig, prompt: str, timeout: float) -> str:
+    payload = {
+        "model": config.model,
+        "messages": [
+            {"role": "system", "content": "你是一个懂达人投放和内容运营的营销策略助手。"},
+            {"role": "user", "content": prompt},
+        ],
+        "temperature": 0.4,
+        "max_tokens": 500,
+    }
+    if config.provider == "通义千问 / 百炼":
+        thinking = os.environ.get("LLM_ENABLE_THINKING", "").strip().lower()
+        if thinking in {"true", "false"}:
+            payload["enable_thinking"] = thinking == "true"
+    request = Request(
+        (config.base_url or "https://api.openai.com/v1").rstrip("/") + "/chat/completions",
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    # One quota reservation produces one POST, with TLS verification and no redirects or retries.
+    with build_opener(_NoLLMRedirect).open(request, timeout=timeout) as response:
+        result = json.loads(response.read(1_000_000))
+    content = result["choices"][0]["message"]["content"]
+    if content is not None and not isinstance(content, str):
+        raise ValueError("Invalid model content type")
+    return content or ""
 
 
 def generate_with_optional_llm(
@@ -134,43 +172,26 @@ def generate_with_optional_llm(
         )
 
     started = time.monotonic()
-    stage_started = started
-    stage = "sdk_import"
-    client_init_seconds = None
-    client_kwargs = {}
+    timeout = min(config.timeout_seconds, 30) if config.timeout_seconds > 0 else 20
     try:
-        from openai import OpenAI
-
-        client_kwargs = {"api_key": config.api_key, "timeout": config.timeout_seconds}
-        if config.base_url:
-            client_kwargs["base_url"] = config.base_url
-        request_kwargs = {}
         if public_web:
-            # One reservation must produce at most one provider request.
-            client_kwargs["max_retries"] = 0
-            client_kwargs["timeout"] = min(config.timeout_seconds, 30) if config.timeout_seconds > 0 else 20
-            request_kwargs["max_tokens"] = 500
-            if config.provider == "通义千问 / 百炼":
-                thinking = os.environ.get("LLM_ENABLE_THINKING", "").strip().lower()
-                if thinking in {"true", "false"}:
-                    request_kwargs["extra_body"] = {"enable_thinking": thinking == "true"}
+            content = _generate_public_content(config, prompt, timeout)
+        else:
+            from openai import OpenAI
 
-        stage = "client_init"
-        stage_started = time.monotonic()
-        client = OpenAI(**client_kwargs)
-        client_init_seconds = time.monotonic() - stage_started
-        stage = "completion"
-        stage_started = time.monotonic()
-        response = client.chat.completions.create(
-            model=config.model,
-            messages=[
-                {"role": "system", "content": "你是一个懂达人投放和内容运营的营销策略助手。"},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.4,
-            **request_kwargs,
-        )
-        content = response.choices[0].message.content
+            client_kwargs = {"api_key": config.api_key, "timeout": config.timeout_seconds}
+            if config.base_url:
+                client_kwargs["base_url"] = config.base_url
+            client = OpenAI(**client_kwargs)
+            response = client.chat.completions.create(
+                model=config.model,
+                messages=[
+                    {"role": "system", "content": "你是一个懂达人投放和内容运营的营销策略助手。"},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.4,
+            )
+            content = response.choices[0].message.content
         if not content or not content.strip():
             return LLMCallResult(
                 content=fallback_content,
@@ -181,6 +202,10 @@ def generate_with_optional_llm(
                 error="模型返回了空内容，请重试。",
             )
 
+        if public_web:
+            logging.getLogger(__name__).info(
+                "AI provider success transport=urllib elapsed=%.1fs", time.monotonic() - started,
+            )
         return LLMCallResult(
             content=content,
             used_llm=True,
@@ -213,16 +238,20 @@ def generate_with_optional_llm(
                     if any(token in message for token in tokens):
                         category = label
                         break
-                cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
+                if isinstance(cause, URLError) and isinstance(cause.reason, Exception):
+                    cause = cause.reason
+                else:
+                    cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
             endpoint = {
                 "https://dashscope.aliyuncs.com/compatible-mode/v1": "dashscope_beijing",
                 "https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1": "trial_beijing",
             }.get((config.base_url or "").rstrip("/"), "other")
             logging.getLogger(__name__).warning(
-                "AI provider failure stage=%s elapsed=%.1fs stage_elapsed=%.1fs client_init_seconds=%s exceptions=%s category=%s endpoint=%s timeout=%s",
-                stage, time.monotonic() - started, time.monotonic() - stage_started,
-                client_init_seconds, chain, category, endpoint, client_kwargs.get("timeout"),
+                "AI provider failure transport=urllib elapsed=%.1fs exceptions=%s category=%s endpoint=%s timeout=%s",
+                time.monotonic() - started, chain, category, endpoint, timeout,
             )
+        if isinstance(exc, HTTPError):
+            exc.close()
         return LLMCallResult(
             content=fallback_content,
             used_llm=False,
