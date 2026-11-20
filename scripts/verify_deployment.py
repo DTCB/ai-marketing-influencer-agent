@@ -23,7 +23,7 @@ def request(url: str, body: dict | None = None) -> tuple[int, dict | str]:
         return response.status, json.loads(content) if "/api/" in url else content
 
 
-def verify(base: str, expected_commit: str | None, live: bool, region: str = "sin1") -> None:
+def verify(base: str, expected_commit: str | None, live: bool, region: str = "iad1") -> None:
     code, page = request(f"{base}/")
     assert code == 200 and isinstance(page, str) and "<html" in page, "Home page did not load"
     code, status = request(f"{base}/api/status")
@@ -61,7 +61,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("url", help="The Vercel deployment root URL")
     parser.add_argument("--commit", help="Expected Git SHA or prefix")
-    parser.add_argument("--region", default="sin1", help="Expected function region (default: sin1)")
+    parser.add_argument("--region", default="iad1", help="Expected function region (default: iad1)")
     parser.add_argument("--live", action="store_true", help="Test real AI from a network with unused daily quota")
     args = parser.parse_args()
     base = args.url.rstrip("/")

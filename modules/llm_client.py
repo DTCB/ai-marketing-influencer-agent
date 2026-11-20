@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-import json
 import logging
 import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Optional
-from urllib.error import HTTPError, URLError
-from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+import httpx
 
 try:
     from dotenv import dotenv_values
@@ -104,7 +103,7 @@ def get_llm_config() -> LLMConfig:
 
 
 def describe_llm_failure(exc: Exception) -> str:
-    status = exc.code if isinstance(exc, HTTPError) else getattr(exc, "status_code", None)
+    status = exc.response.status_code if isinstance(exc, httpx.HTTPStatusError) else getattr(exc, "status_code", None)
     if status == 401:
         return "服务商拒绝了 API Key（401）。请检查当前使用的 Key。"
     if status == 403:
@@ -113,17 +112,11 @@ def describe_llm_failure(exc: Exception) -> str:
         return "服务商限制了请求（429）。请检查额度或稍后重试。"
     if isinstance(status, int):
         return f"服务商返回 HTTP {status}。请检查接口地址和模型配置，或稍后重试。"
-    reason = exc.reason if isinstance(exc, URLError) else exc
-    if isinstance(reason, TimeoutError) or type(exc).__name__ == "APITimeoutError":
+    if isinstance(exc, (TimeoutError, httpx.TimeoutException)) or type(exc).__name__ == "APITimeoutError":
         return "连接或等待模型响应超时，请重试。"
-    if isinstance(exc, (URLError, ConnectionError)) or type(exc).__name__ == "APIConnectionError":
+    if isinstance(exc, (httpx.RequestError, ConnectionError)) or type(exc).__name__ == "APIConnectionError":
         return "无法连接到模型服务，请检查网络和接口地址。"
     return "模型调用失败，请检查本地配置。"
-
-
-class _NoLLMRedirect(HTTPRedirectHandler):
-    def redirect_request(self, request, file, code, message, headers, new_url):
-        return None
 
 
 def _generate_public_content(config: LLMConfig, prompt: str, timeout: float) -> str:
@@ -140,15 +133,21 @@ def _generate_public_content(config: LLMConfig, prompt: str, timeout: float) -> 
         thinking = os.environ.get("LLM_ENABLE_THINKING", "").strip().lower()
         if thinking in {"true", "false"}:
             payload["enable_thinking"] = thinking == "true"
-    request = Request(
-        (config.base_url or "https://api.openai.com/v1").rstrip("/") + "/chat/completions",
-        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
-        method="POST",
+    transport = httpx.HTTPTransport(
+        local_address="0.0.0.0", retries=0, verify=True, trust_env=False,
     )
     # One quota reservation produces one POST, with TLS verification and no redirects or retries.
-    with build_opener(_NoLLMRedirect).open(request, timeout=timeout) as response:
-        result = json.loads(response.read(1_000_000))
+    with httpx.Client(
+        transport=transport, trust_env=False, follow_redirects=False,
+        timeout=httpx.Timeout(timeout, connect=min(timeout, 5)),
+    ) as client:
+        response = client.post(
+            (config.base_url or "https://api.openai.com/v1").rstrip("/") + "/chat/completions",
+            json=payload,
+            headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
+        )
+        response.raise_for_status()
+        result = response.json()
     content = result["choices"][0]["message"]["content"]
     if content is not None and not isinstance(content, str):
         raise ValueError("Invalid model content type")
@@ -204,7 +203,7 @@ def generate_with_optional_llm(
 
         if public_web:
             logging.getLogger(__name__).info(
-                "AI provider success transport=urllib elapsed=%.1fs", time.monotonic() - started,
+                "AI provider success transport=httpx_ipv4 elapsed=%.1fs", time.monotonic() - started,
             )
         return LLMCallResult(
             content=content,
@@ -222,6 +221,7 @@ def generate_with_optional_llm(
             seen = set()
             category = "unknown"
             connection_errors = (
+                ("address_unavailable", ("cannot assign requested address",)),
                 ("dns", ("temporary failure in name resolution", "name or service not known", "getaddrinfo failed", "nodename nor servname")),
                 ("tls", ("certificate verify failed", "certificate_verify_failed", "ssl handshake", "tls handshake")),
                 ("refused", ("connection refused",)),
@@ -233,25 +233,22 @@ def generate_with_optional_llm(
                 seen.add(id(cause))
                 error_number = getattr(cause, "errno", None)
                 chain.append((type(cause).__name__, error_number if type(error_number) is int else None))
+                if error_number == 99:
+                    category = "address_unavailable"
                 message = str(cause).lower()
                 for label, tokens in connection_errors:
                     if any(token in message for token in tokens):
                         category = label
                         break
-                if isinstance(cause, URLError) and isinstance(cause.reason, Exception):
-                    cause = cause.reason
-                else:
-                    cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
+                cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
             endpoint = {
                 "https://dashscope.aliyuncs.com/compatible-mode/v1": "dashscope_beijing",
                 "https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1": "trial_beijing",
             }.get((config.base_url or "").rstrip("/"), "other")
             logging.getLogger(__name__).warning(
-                "AI provider failure transport=urllib elapsed=%.1fs exceptions=%s category=%s endpoint=%s timeout=%s",
+                "AI provider failure transport=httpx_ipv4 elapsed=%.1fs exceptions=%s category=%s endpoint=%s timeout=%s",
                 time.monotonic() - started, chain, category, endpoint, timeout,
             )
-        if isinstance(exc, HTTPError):
-            exc.close()
         return LLMCallResult(
             content=fallback_content,
             used_llm=False,
