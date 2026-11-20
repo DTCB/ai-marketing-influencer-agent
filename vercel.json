@@ -5,7 +5,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "fluid": true,
-  "regions": ["hkg1"],
+  "regions": ["sin1"],
   "functions": {
     "api/index.py": {
       "maxDuration": 120,

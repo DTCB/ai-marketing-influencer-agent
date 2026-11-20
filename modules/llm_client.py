@@ -137,6 +137,7 @@ def generate_with_optional_llm(
     stage_started = started
     stage = "sdk_import"
     client_init_seconds = None
+    client_kwargs = {}
     try:
         from openai import OpenAI
 
@@ -190,21 +191,37 @@ def generate_with_optional_llm(
     except Exception as exc:
         if public_web:
             # Exception messages can contain URLs, headers or provider payloads.
-            # Record only exception types and numeric operating-system codes.
+            # Convert known connection messages to fixed categories without logging them.
             chain = []
             cause = exc
             seen = set()
+            category = "unknown"
+            connection_errors = (
+                ("dns", ("temporary failure in name resolution", "name or service not known", "getaddrinfo failed", "nodename nor servname")),
+                ("tls", ("certificate verify failed", "certificate_verify_failed", "ssl handshake", "tls handshake")),
+                ("refused", ("connection refused",)),
+                ("network", ("network is unreachable", "network unreachable", "no route to host")),
+            )
             for _ in range(8):
                 if cause is None or id(cause) in seen:
                     break
                 seen.add(id(cause))
                 error_number = getattr(cause, "errno", None)
                 chain.append((type(cause).__name__, error_number if type(error_number) is int else None))
+                message = str(cause).lower()
+                for label, tokens in connection_errors:
+                    if any(token in message for token in tokens):
+                        category = label
+                        break
                 cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
+            endpoint = {
+                "https://dashscope.aliyuncs.com/compatible-mode/v1": "dashscope_beijing",
+                "https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1": "trial_beijing",
+            }.get((config.base_url or "").rstrip("/"), "other")
             logging.getLogger(__name__).warning(
-                "AI provider failure stage=%s elapsed=%.1fs stage_elapsed=%.1fs client_init_seconds=%s exceptions=%s",
+                "AI provider failure stage=%s elapsed=%.1fs stage_elapsed=%.1fs client_init_seconds=%s exceptions=%s category=%s endpoint=%s timeout=%s",
                 stage, time.monotonic() - started, time.monotonic() - stage_started,
-                client_init_seconds, chain,
+                client_init_seconds, chain, category, endpoint, client_kwargs.get("timeout"),
             )
         return LLMCallResult(
             content=fallback_content,
