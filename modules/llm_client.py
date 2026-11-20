@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import logging
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Optional
@@ -131,6 +133,10 @@ def generate_with_optional_llm(
             error="未配置 API Key，已使用本地模板生成。",
         )
 
+    started = time.monotonic()
+    stage_started = started
+    stage = "sdk_import"
+    client_init_seconds = None
     try:
         from openai import OpenAI
 
@@ -148,7 +154,12 @@ def generate_with_optional_llm(
                 if thinking in {"true", "false"}:
                     request_kwargs["extra_body"] = {"enable_thinking": thinking == "true"}
 
+        stage = "client_init"
+        stage_started = time.monotonic()
         client = OpenAI(**client_kwargs)
+        client_init_seconds = time.monotonic() - stage_started
+        stage = "completion"
+        stage_started = time.monotonic()
         response = client.chat.completions.create(
             model=config.model,
             messages=[
@@ -177,6 +188,24 @@ def generate_with_optional_llm(
             base_url=config.base_url,
         )
     except Exception as exc:
+        if public_web:
+            # Exception messages can contain URLs, headers or provider payloads.
+            # Record only exception types and numeric operating-system codes.
+            chain = []
+            cause = exc
+            seen = set()
+            for _ in range(8):
+                if cause is None or id(cause) in seen:
+                    break
+                seen.add(id(cause))
+                error_number = getattr(cause, "errno", None)
+                chain.append((type(cause).__name__, error_number if type(error_number) is int else None))
+                cause = cause.__cause__ or (None if cause.__suppress_context__ else cause.__context__)
+            logging.getLogger(__name__).warning(
+                "AI provider failure stage=%s elapsed=%.1fs stage_elapsed=%.1fs client_init_seconds=%s exceptions=%s",
+                stage, time.monotonic() - started, time.monotonic() - stage_started,
+                client_init_seconds, chain,
+            )
         return LLMCallResult(
             content=fallback_content,
             used_llm=False,
