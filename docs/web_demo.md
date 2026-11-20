@@ -7,7 +7,7 @@
 ## 首次发布与后续更新
 
 1. 在本地运行 `python -m scripts.build_demo_snapshot --check`、`npm ci` 和 `npm run build`。业务数据变化后，运行 `python -m scripts.build_demo_snapshot` 更新前端随包提供的案例。
-2. 从 [Vercel 项目导入](https://vercel.com/new)连接上述 GitHub 仓库。Root Directory 使用仓库根目录，Production Branch 设为 `main`。配置由 `vercel.json` 提供，Node 24.x、Vite 输出 `dist`、Python 3.12、香港 `hkg1`、函数最长 120 秒。在项目设置确认 Fluid Compute 已开启。
+2. 从 [Vercel 项目导入](https://vercel.com/new)连接上述 GitHub 仓库。Root Directory 使用仓库根目录，Production Branch 设为 `main`。配置由 `vercel.json` 提供，Node 24.x、Vite 输出 `dist`、Python 3.12、新加坡 `sin1`、函数最长 120 秒。在项目设置确认 Fluid Compute 已开启。
 3. 推送 `codex/*` 分支并查看 Vercel Preview，核对提交、构建日志、首页和 `/api/status`。确认后合并到 `main`，使用 Vercel 原生 Git 集成更新生产域名。正式链接填生产域名。
 4. 用国内手机流量和无痕窗口确认可免登录查看案例，测试改预算、排除达人、Brief 编辑与 TXT 下载、确认后复盘。记录访问网络、日期、提交和函数区域。
 
@@ -48,3 +48,5 @@ Upstash 可使用独立实例或沿用已有实例，达人 Demo 写入专用命
 | 自动更新 | Preview 和正式部署分别对应 GitHub 的预览和主分支提交，发布后生产 URL 一致 |
 
 2026-11-19，生产域名首次指向案例版提交 `c345f3f`。匿名 HTTPS 验证首页、预算组合和复盘 API 通过，`/api/status` 显示 `hkg1`、案例模式。国内手机流量和实时模型待验收。
+
+2026-11-20，香港函数多次连接百炼失败，日志记录 APIConnectionError，单次约 62 秒后回退模板。使用同地域备用接入域名仍失败后，恢复原百炼接口，并将函数切到新加坡 `sin1`。生产状态与提交已核对，推荐解释、Brief 解析和复盘摘要均返回 live，分别耗时约 2.7、1.9、2.2 秒。保留当前 Key、模型和配额。错误提示现区分连接失败、超时及服务商拒绝，日志仅记录脱敏诊断。

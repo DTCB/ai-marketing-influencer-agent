@@ -23,11 +23,11 @@ def request(url: str, body: dict | None = None) -> tuple[int, dict | str]:
         return response.status, json.loads(content) if "/api/" in url else content
 
 
-def verify(base: str, expected_commit: str | None, live: bool) -> None:
+def verify(base: str, expected_commit: str | None, live: bool, region: str = "sin1") -> None:
     code, page = request(f"{base}/")
     assert code == 200 and isinstance(page, str) and "<html" in page, "Home page did not load"
     code, status = request(f"{base}/api/status")
-    assert code == 200 and isinstance(status, dict) and status["region"] == "hkg1", "API region is not hkg1"
+    assert code == 200 and isinstance(status, dict) and status["region"] == region, f"API region is not {region}"
     if expected_commit:
         assert (status["commit_sha"] or "").startswith(expected_commit), "Unexpected deployed commit"
     assert status["ai_available"] is live, "Unexpected AI mode"
@@ -61,13 +61,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("url", help="The Vercel deployment root URL")
     parser.add_argument("--commit", help="Expected Git SHA or prefix")
+    parser.add_argument("--region", default="sin1", help="Expected function region (default: sin1)")
     parser.add_argument("--live", action="store_true", help="Test real AI from a network with unused daily quota")
     args = parser.parse_args()
     base = args.url.rstrip("/")
     parsed = urlsplit(base)
     if parsed.scheme != "https" or not parsed.hostname or parsed.path or parsed.username or parsed.query or parsed.fragment:
         parser.error("Provide a deployment root HTTPS URL.")
-    verify(base, args.commit, args.live)
+    verify(base, args.commit, args.live, args.region)
 
 
 if __name__ == "__main__":
